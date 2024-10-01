@@ -72,4 +72,4 @@ Fill out the ```w.csv``` file with the wallets to be used for token transfers. T
 
 ## License
 
-Project **brodev3**/blumer is distributed under the MIT license.
+Project **brodev3**/ERC-20 Token Transfer Toolis distributed under the MIT license.
