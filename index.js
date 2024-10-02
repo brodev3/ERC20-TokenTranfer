@@ -27,7 +27,7 @@ async function main() {
         const receiver = process.env.RECEIVER ? process.env.RECEIVER : row.split(";")[1];
 
         const wallet = new Wallet(privateKey, receiver);
-        const delay = randomDelay(0, 1_000);
+        const delay = randomDelay(1_000, process.env.MAXTIME);
         setTimeout(transfer, delay, wallet);
     };
 };

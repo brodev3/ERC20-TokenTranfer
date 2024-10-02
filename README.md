@@ -29,6 +29,8 @@ This tool allows you to send all ERC-20 tokens to a specified address. You can u
     RPC_URL = "https://mainnet.base.org"
     CONTRACT = "0x0000000000000000000000000000000000000000"
     RECEIVER = "0x0000000000000000000000000000000000000000"
+    MAXTIME = 10000
+
     
 Explanation of parameters:
 - **DECRYPT**: Used for encrypted text. If not needed, leave it empty. If needed, set to ```1```.
@@ -36,6 +38,7 @@ Explanation of parameters:
 - **RPC_URL**: The RPC URL of the token's network.
 - **CONTRACT**: The ERC-20 token contract address.
 - **RECEIVER**: The default recipient for all wallets. Leave empty if sending to different addresses per wallet.
+- **MAXTIME**: The maximum time (in milliseconds) that will be randomly assigned to delay the execution of token transfers from each wallet. All accounts will be triggered within this random delay. For example, if MAXTIME is set to 5000, the transfer can occur anytime between 1 second and 5 seconds (1000-5000 milliseconds).
 
  ### ABI Configuration (Optional)
 You can add the ABI of the token to the ```ABI.json``` file if necessary. By default, the software uses the standard ERC-20 ABI, so it's not required to provide a custom ABI unless the token has additional functionality or non-standard methods.
@@ -61,7 +64,7 @@ Fill out the ```w.csv``` file with the wallets to be used for token transfers. T
     ```
     npm install
     ```
-8. Run the software, and it will transfer tokens from the specified wallets to the respective addresses.: 
+8. Run the software, and it will transfer tokens from the specified wallets to the respective addresses. All accounts will start transferring after a random delay, determined between 1 second and the value specified in MAXTIME.
     ```
     node index
     ```
