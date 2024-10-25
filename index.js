@@ -9,9 +9,12 @@ function randomDelay(min, max) {
 const transfer = async (wallet) => {
     try {
         const balance = await wallet.balance();
-        const transferTX = await wallet.transfer(wallet.receiver, balance);
+        if (balance > 0 ) {
+            const transferTX = await wallet.transfer(wallet.receiver, balance);
 
-        log.success(`Wallet: ${wallet.address}. Transfered all tokens to ${wallet.receiver}!\nTX: ${transferTX.hash}`);
+            log.success(`Wallet: ${wallet.address}. Transfered all tokens to ${wallet.receiver}!\nTX: ${transferTX.hash}`);
+        }
+        else log.warn(`Wallet: ${wallet.address}. Balance <= 0`);
 
     }
     catch (err){
