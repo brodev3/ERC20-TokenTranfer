@@ -41,6 +41,33 @@ class Wallet {
             throw error;
         };
     };
+
+    async nativeBalance() {
+        try {
+            const balance = await provider.getBalance(this.address);
+            return ethers.utils.formatEther(balance); // Returns balance in Ether
+        } catch (error) {
+            log.error(`Failed to fetch native token balance. Error message: ${error.message}\nStack: ${error.stack}`);
+            throw error;
+        };
+    };
+
+    async transferNative(receiver, amount) {
+        try {
+            const tx = await this.chainConnect.sendTransaction({
+                to: receiver,
+                value: ethers.utils.parseEther(amount.toString()), // Converts amount to Wei
+            });
+            const receipt = await tx.wait();
+            return receipt;
+        } catch (error) {
+            log.error(
+                `Wallet: ${this.address}. Native token transfer error. Message: ${error.message}\nStack: ${error.stack}
+                Transaction: ${error.transaction}\nTransactionHash: ${error.transactionHash}`
+            );
+            throw error;
+        };
+    };
     
 };
 

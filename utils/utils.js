@@ -5,7 +5,7 @@ require('dotenv').config();
 const path = require("path")
 
 const secretKey = crypto.createHash('sha256').update(process.env.MESSAGE).digest();
-const inputFilePath = path.resolve(__dirname, '..') + '/input/w.csv';
+const inputFilePath = path.resolve(__dirname, '..') + '/input/';
 
 function decrypt(text, secretKey) {
   const [iv, encrypted] = text.split(':');
@@ -42,11 +42,11 @@ async function readDecryptCSVToArray() {
   });
 };
 
-async function readCSVToArray() {
+async function readCSVToArray(path) {
   return new Promise((resolve, reject) => {
     const rows = [];
 
-    fs.createReadStream(inputFilePath)
+    fs.createReadStream(inputFilePath + path)
       .pipe(csv())
       .on('data', (row) => {
         rows.push(row);
