@@ -19,7 +19,7 @@ async function readDecryptCSVToArray() {
   return new Promise((resolve, reject) => {
     const decryptedRows = [];
 
-    fs.createReadStream(inputFilePath)
+    fs.createReadStream(inputFilePath + "w.csv")
       .pipe(csv())
       .on('data', (row) => {
         const decryptedRow = {};

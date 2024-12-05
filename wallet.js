@@ -1,6 +1,6 @@
 const utils = require('./utils/utils');
 const log = require('./utils/logger')
-const { ethers } = require("ethers");
+const { ethers, formatEther, parseEther } = require("ethers");
 const contractABI = require('./ABI.json');
 
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
@@ -14,7 +14,7 @@ class Wallet {
         this.address = this.chainConnect.address;
         this.privateKey = this.chainConnect.privateKey;
 
-        this.contract = new ethers.Contract(process.env.CONTRACT, contractABI, this.chainConnect);
+        // this.contract = new ethers.Contract(process.env.CONTRACT, contractABI, this.chainConnect);
 
     };
 
@@ -45,7 +45,7 @@ class Wallet {
     async nativeBalance() {
         try {
             const balance = await provider.getBalance(this.address);
-            return ethers.utils.formatEther(balance); // Returns balance in Ether
+            return formatEther(balance); // Returns balance in Ether
         } catch (error) {
             log.error(`Failed to fetch native token balance. Error message: ${error.message}\nStack: ${error.stack}`);
             throw error;
@@ -56,12 +56,12 @@ class Wallet {
         try {
             const tx = await this.chainConnect.sendTransaction({
                 to: receiver,
-                value: ethers.utils.parseEther(amount.toString()), // Converts amount to Wei
+                value: amount.toString(), // Converts amount to Wei
             });
             const receipt = await tx.wait();
             return receipt;
         } catch (error) {
-            log.error(
+             log.error(
                 `Wallet: ${this.address}. Native token transfer error. Message: ${error.message}\nStack: ${error.stack}
                 Transaction: ${error.transaction}\nTransactionHash: ${error.transactionHash}`
             );
