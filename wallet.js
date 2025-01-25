@@ -86,8 +86,7 @@ class Wallet {
         try {
             const gasLimit = await provider.estimateGas({
                 to: receiver,
-                from: this.address,
-                value: parseEther('0.1') 
+                from: this.address
             });
             return gasLimit;
         } catch (error) {
