@@ -14,7 +14,7 @@ class Wallet {
         this.address = this.chainConnect.address;
         this.privateKey = this.chainConnect.privateKey;
 
-        // this.contract = new ethers.Contract(process.env.CONTRACT, contractABI, this.chainConnect);
+        this.contract = new ethers.Contract(process.env.CONTRACT, contractABI, this.chainConnect);
 
     };
 
@@ -54,19 +54,21 @@ class Wallet {
 
     async transferNative(receiver, amount) {
         try {
-            const tx = await this.chainConnect.sendTransaction({
+
+            const transaction = {
                 to: receiver,
-                value: amount.toString(), // Converts amount to Wei
-            });
-            const receipt = await tx.wait();
+                value: amount,
+            };
+
+            const signedTransaction = await this.chainConnect.signTransaction(transaction);
+            const receipt = await provider.sendTransaction(signedTransaction);
             return receipt;
         } catch (error) {
-             log.error(
-                `Wallet: ${this.address}. Native token transfer error. Message: ${error.message}\nStack: ${error.stack}
-                Transaction: ${error.transaction}\nTransactionHash: ${error.transactionHash}`
+            log.error(
+                `Wallet: ${this.address}. Native token transfer error. Message: ${error.message}\nStack: ${error.stack}`
             );
             throw error;
-        };
+        }
     };
     
 };
