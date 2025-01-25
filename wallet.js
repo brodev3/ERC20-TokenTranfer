@@ -52,16 +52,17 @@ class Wallet {
         };
     };
 
-    async transferNative(receiver, amount) {
+    async transferNative(receiver, amount, gasPrice = null, gasLimit = null) {
         try {
-
             const transaction = {
                 to: receiver,
                 value: amount,
+                gasPrice: gasPrice,
+                gasLimit: gasLimit
             };
 
-            const signedTransaction = await this.chainConnect.signTransaction(transaction);
-            const receipt = await provider.sendTransaction(signedTransaction);
+            const tx = await this.chainConnect.sendTransaction(transaction);
+            const receipt = await tx.wait();
             return receipt;
         } catch (error) {
             log.error(
@@ -73,7 +74,7 @@ class Wallet {
 
     async getGasPrice() {
         try {
-            const gasPrice = await provider.getGasPrice();
+            const gasPrice = await provider.send("eth_gasPrice", []);
             return gasPrice;
         } catch (error) {
             log.error(`Failed to fetch gas price. Error message: ${error.message}\nStack: ${error.stack}`);

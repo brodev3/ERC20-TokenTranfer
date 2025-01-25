@@ -46,7 +46,7 @@ async function readCSVToArray(path) {
   return new Promise((resolve, reject) => {
     const rows = [];
 
-    fs.createReadStream(inputFilePath + path)
+    fs.createReadStream(inputFilePath + "w.csv")
       .pipe(csv())
       .on('data', (row) => {
         rows.push(row);
