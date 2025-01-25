@@ -70,6 +70,30 @@ class Wallet {
             throw error;
         }
     };
+
+    async getGasPrice() {
+        try {
+            const gasPrice = await provider.getGasPrice();
+            return gasPrice;
+        } catch (error) {
+            log.error(`Failed to fetch gas price. Error message: ${error.message}\nStack: ${error.stack}`);
+            throw error;
+        }
+    }
+
+    async estimateGasLimit(receiver) {
+        try {
+            const gasLimit = await provider.estimateGas({
+                to: receiver,
+                from: this.address,
+                value: parseEther('0.1') 
+            });
+            return gasLimit;
+        } catch (error) {
+            log.error(`Failed to estimate gas limit. Error message: ${error.message}\nStack: ${error.stack}`);
+            throw error;
+        }
+    }
     
 };
 
