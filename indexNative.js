@@ -1,7 +1,7 @@
 const Wallet = require('./wallet');
 const utils = require('./utils/utils');
 const log = require('./utils/logger');
-const { parseEther } = require("ethers");
+const { parseEther, formatEther } = require("ethers");
 
 function randomDelay(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -9,15 +9,21 @@ function randomDelay(min, max) {
 
 const transferNative = async (wallet) => {
     try {
-        const balance = BigInt(parseEther(await wallet.nativeBalance()));
-        const gasPrice = BigInt(await wallet.getGasPrice());
-        const gasLimit = BigInt(await wallet.estimateGasLimit(wallet.receiver));
+        const balanceWei = await wallet.nativeBalance();
+        const balance = BigInt(parseEther(balanceWei.toString()));
 
+        let gasPrice = BigInt(await wallet.getGasPrice());
+        let gasLimit = BigInt(await wallet.estimateGasLimit(wallet.receiver));
+
+        gasPrice = gasPrice * BigInt(20) / BigInt(10);
+        gasLimit = gasLimit * BigInt(40) / BigInt(10)
         const totalGasCost = gasPrice * gasLimit;
         const transferableAmount = balance - totalGasCost;
 
+        log.info(`Balance: ${balance}, Gas Price: ${gasPrice}, Gas Limit: ${gasLimit}, Total Gas Cost: ${totalGasCost}, Transferable Amount: ${transferableAmount}`);
+
         if (transferableAmount > 0) {
-            const transferTX = await wallet.transferNative(wallet.receiver, transferableAmount.toString(), gasPrice, gasLimit);
+            const transferTX = await wallet.transferNative(wallet.receiver, transferableAmount.toString());
 
             log.success(`Wallet: ${wallet.address}. Transferred native tokens to ${wallet.receiver}!\nTX: ${transferTX.hash}`);
         } else {
