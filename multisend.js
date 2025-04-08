@@ -83,7 +83,7 @@ async function processWallet(wallet, receivers, tokenAmount, gasReserve, lock) {
 
 async function main() {
     try {
-        const walletData = process.env.DECRYPT ? await utils.readDecryptCSVToArray() : await utils.readCSVToArray("w.csv");
+        const walletData = process.env.DECRYPT ? await utils.readDecryptCSVToArray("w.csv") : await utils.readCSVToArray("w.csv");
         const receivers = await utils.readCSVToArray('receivers.csv');
 
         const wallets = walletData.map(row => new Wallet(row));

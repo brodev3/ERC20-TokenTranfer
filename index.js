@@ -23,7 +23,7 @@ const transfer = async (wallet) => {
 };
 
 async function main() {
-    const data = process.env.DECRYPT ? await utils.readDecryptCSVToArray() : await utils.readCSVToArray();
+    const data = process.env.DECRYPT ? await utils.readDecryptCSVToArray("w.csv") : await utils.readCSVToArray("w.csv");
     for (let index =  0; index < data.length; index++) {
         const row = data[index];
         const privateKey = process.env.RECEIVER ? row : row.split(";")[0];

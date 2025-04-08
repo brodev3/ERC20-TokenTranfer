@@ -15,11 +15,11 @@ function decrypt(text, secretKey) {
   return decrypted;
 };
 
-async function readDecryptCSVToArray() {
+async function readDecryptCSVToArray(inputFileName) {
   return new Promise((resolve, reject) => {
     const decryptedRows = [];
 
-    fs.createReadStream(inputFilePath + "w.csv")
+    fs.createReadStream(inputFilePath + inputFileName)
       .pipe(csv())
       .on('data', (row) => {
         const decryptedRow = {};
@@ -42,11 +42,11 @@ async function readDecryptCSVToArray() {
   });
 };
 
-async function readCSVToArray(path) {
+async function readCSVToArray(inputFileName) {
   return new Promise((resolve, reject) => {
     const rows = [];
 
-    fs.createReadStream(inputFilePath + "w.csv")
+    fs.createReadStream(inputFilePath + inputFileName)
       .pipe(csv())
       .on('data', (row) => {
         rows.push(row);
